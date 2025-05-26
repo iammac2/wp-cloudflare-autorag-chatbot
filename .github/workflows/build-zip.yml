@@ -1,8 +1,7 @@
 name: Build plugin zip
 
 permissions:
-  contents: write   # needed to create / upload a Release
-  id-token: read    # (default, fine to keep)
+  contents: write
 
 on:
   push:
