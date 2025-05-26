@@ -1,0 +1,77 @@
+###############################################################################
+# OS-level noise (macOS & Windows)
+###############################################################################
+# macOS metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+
+# Windows metadata
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+###############################################################################
+# IDE / editor folders
+###############################################################################
+# VS Code
+.vscode/
+
+# PhpStorm / WebStorm / IntelliJ
+.idea/
+
+# Eclipse / NetBeans
+.project
+.classpath
+.settings/
+nbproject/
+
+# Xcode
+*.xcworkspace
+*.xcuserstate
+*.xcodeproj
+
+###############################################################################
+# Build artefacts & dependencies
+###############################################################################
+# Composer / npm
+vendor/
+node_modules/
+
+# Zip archives (WP release packages)
+*.zip
+
+# Logs & misc
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+
+###############################################################################
+# WordPress build-tool artefacts
+###############################################################################
+# build scripts that export to /dist or /build
+build/
+dist/
+
+# Style-lint caches, PHPUnit cache, etc.
+.cache/
+.phpunit.result.cache
+
+###############################################################################
+# Local env overrides
+###############################################################################
+.env
+.env.*
+
+###############################################################################
+# End of file
+###############################################################################
