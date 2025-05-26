@@ -1,5 +1,9 @@
 name: Build plugin zip
 
+permissions:
+  contents: write   # needed to create / upload a Release
+  id-token: read    # (default, fine to keep)
+
 on:
   push:
     tags:            # build only when you tag a release, e.g. v1.3
