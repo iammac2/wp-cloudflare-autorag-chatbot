@@ -27,6 +27,7 @@ function autorag_chatbot_register_settings() {
         'account_id' => [ 'label' => __( 'Account ID', 'autorag-chatbot' ), 'type' => 'text' ],
         'rag_slug'   => [ 'label' => __( 'RAG Slug', 'autorag-chatbot' ),   'type' => 'text' ],
         'api_token'  => [ 'label' => __( 'API Token', 'autorag-chatbot' ),  'type' => 'password' ],
+        'accent_color' => [ 'label' => __( 'Accent Colour (Hex)', 'autorag-chatbot' ),'type' => 'text', 'class'=>'color-field' ],
     ];
 
     foreach ( $fields as $key => $field ) {
@@ -51,11 +52,20 @@ add_action( 'admin_init', 'autorag_chatbot_register_settings' );
  */
 function autorag_chatbot_sanitize_options( $raw ) {
     $clean = [];
+
+    // plain text fields
     foreach ( [ 'account_id', 'rag_slug', 'api_token' ] as $key ) {
         if ( isset( $raw[ $key ] ) ) {
             $clean[ $key ] = sanitize_text_field( $raw[ $key ] );
         }
     }
+
+    // hex colour (defaults to plugin orange if empty / invalid)
+    if ( isset( $raw['accent_color'] ) ) {
+        $color = sanitize_hex_color( $raw['accent_color'] );
+        $clean['accent_color'] = $color ? $color : '#d96704';
+    }
+
     return $clean;
 }
 

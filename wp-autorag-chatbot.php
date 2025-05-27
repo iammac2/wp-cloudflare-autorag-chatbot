@@ -3,7 +3,7 @@
 /*
 Plugin Name: WP Cloudflare AutoRAG Chatbot
 Description: Adds a shortcode that renders a chatbot UI backed by Cloudflare AutoRAG. Includes a server-side proxy to avoid exposing your API token.
-Version: 1.3
+Version: 1.4.0
 Author: neuno.ai
 Author URI: https://neuno.ai
 License: GPL-2.0-or-later
@@ -28,14 +28,14 @@ function autorag_chatbot_enqueue_assets() {
         'autorag-chatbot-css',
         AUTORAG_CB_URL . 'chatbot.css',
         [],
-        '1.3'
+        '1.4.0'
     );
 
     wp_enqueue_script(
         'autorag-chatbot-js',
         AUTORAG_CB_URL . 'chatbot.js',
         [],
-        '1.3',
+        '1.4.0',
         true
     );
 
@@ -54,12 +54,26 @@ add_action( 'wp_enqueue_scripts', 'autorag_chatbot_enqueue_assets' );
  * Shortcode that renders the chat UI.
  */
 function autorag_chatbot_shortcode() {
-    ob_start();
-    ?>
-    <div id="autorag-chatbot">
-        <div id="chat-window" style="max-height:300px;overflow:auto;border:1px solid #ddd;padding:10px"></div>
-        <input type="text" id="chat-input" placeholder="<?php echo esc_attr__( 'Ask a question…', 'autorag-chatbot' ); ?>" style="width:100%;margin-top:8px">
+
+    $options = get_option( 'autorag_chatbot_settings', [] );
+    $accent  = $options['accent_color'] ?? '#d96704';
+
+    ob_start(); ?>
+
+    <!--  ▼ style attribute injects the custom property  -->
+    <div id="autorag-chatbot" style="--n-accent: <?php echo esc_attr( $accent ); ?>;">
+        <div class="chat-card">
+            <div id="chat-window"></div>
+
+            <div class="input-row">
+                <input type="text"
+                       id="chat-input"
+                       placeholder="<?php echo esc_attr__( 'Ask a question…', 'autorag-chatbot' ); ?>">
+                <button type="button" class="send-btn">Send</button>
+            </div>
+        </div>
     </div>
+
     <?php
     return ob_get_clean();
 }

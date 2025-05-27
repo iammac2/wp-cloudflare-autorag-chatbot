@@ -87,5 +87,30 @@
                     automatically, or schedule a nightly <code>r2 sync</code>.
                 </p>
             </li>
+            <li>
+                <h3>(Optional) Customise the System Prompt</h3>
+                <p>
+                    AutoRAG’s default generation prompt is:<br>
+                    <em>Use the following pieces of context to answer the user.<br>
+                     Provide sources for each statement, in Markdown links.</em>
+                </p>
+                <p>
+                    Change <b>Settings → Generation → System Prompt</b> to make it more 'human'. Example:<br>
+                    <em>You are a friendly concierge for customers.<br>
+                        • Write in clear conversational English (UK).<br>  
+                        • Summarise concisely; avoid legal jargon unless necessary.<br>  
+                        • Unless the user explicitly asks for sources,<br>
+                          DO NOT include file names or links in your answer.<br>  
+                        • If you can’t find an answer in the context, say “I’m not sure” rather than inventing one.<br>
+                        <br>
+                        CONTEXT:<br>
+                        {context}<br>
+                        <br>
+                        USER QUESTION:<br>
+                        {query}<br>
+                        <br>
+                        ASSISTANT ANSWER:</em>
+                </p>                
+            </li>            
         </ol>
     </div>

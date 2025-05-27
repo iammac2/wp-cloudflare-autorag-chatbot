@@ -1,25 +1,34 @@
-
-/* global AutoRAGConfig */
+/* Global AutoRAGConfig */
 document.addEventListener('DOMContentLoaded', () => {
-  const input = document.getElementById('chat-input');
+  const input      = document.getElementById('chat-input');
   const chatWindow = document.getElementById('chat-window');
+  const sendBtn    = document.querySelector('#autorag-chatbot .send-btn');
 
-  const appendMessage = (author, text) => {
+  const appendMessage = (author, textOrHTML, isHTML = false) => {
     const wrapper = document.createElement('div');
     wrapper.className = 'bubble ' + (author === 'You' ? 'user' : 'bot');
-    wrapper.textContent = text;
+    if (isHTML) {
+       wrapper.innerHTML = textOrHTML;
+    } else {
+       wrapper.textContent = textOrHTML;
+    }
     chatWindow.appendChild(wrapper);
     chatWindow.scrollTop = chatWindow.scrollHeight;
+    return wrapper;
   };
 
-  input.addEventListener('keypress', async (e) => {
-    if (e.key !== 'Enter') return;
+  async function handleSend () {
     const userMessage = input.value.trim();
     if (!userMessage) return;
 
     appendMessage('You', userMessage);
     input.value = '';
-    appendMessage('Bot', '…');
+
+    const bubble = appendMessage(
+      'Bot',
+      '<span class="typing-dots"><span></span><span></span><span></span></span>',
+      true
+    );
 
     try {
       const response = await fetch(AutoRAGConfig.endpoint, {
@@ -28,13 +37,39 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify({ query: userMessage })
       });
 
-      if (!response.ok) throw new Error('HTTP ' + response.status);
+      const text = await response.text();
 
-      const data = await response.json();
-      chatWindow.lastChild.textContent =
-        data?.result?.response || 'No answer';
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (parseErr) {
+        throw new Error('Server returned non-JSON – status ' + response.status);
+      }
+
+      if (!response.ok) {
+        const msg =
+              data.error?.errors?.[0]?.message
+           || data.errors?.[0]?.message
+           || 'HTTP ' + response.status;
+        throw new Error(msg);
+      }
+
+      bubble.textContent = data.result?.response || 'No answer';
+
     } catch (err) {
-      chatWindow.lastChild.textContent = 'Error – ' + err.message;
+      bubble.textContent =
+        err.message.startsWith('Workers AI:')
+          ? 'Sorry I had a problem, please re-phrase the question.'
+          : 'Error – ' + err.message;
     }
+  }
+
+  /* wire up both triggers */
+  input.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') handleSend();
   });
+
+  if (sendBtn) {
+    sendBtn.addEventListener('click', handleSend);
+  }
 });
