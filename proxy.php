@@ -56,7 +56,7 @@ function autorag_chatbot_search( WP_REST_Request $request ) {
                 'Authorization' => "Bearer {$token}",
             ],
             'body'    => wp_json_encode( [ 'query' => $query ] ),
-            'timeout' => 20,
+            'timeout' => 45,
         ]
     );
 
