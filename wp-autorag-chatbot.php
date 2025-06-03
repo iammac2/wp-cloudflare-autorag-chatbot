@@ -1,9 +1,8 @@
-
 <?php
 /*
 Plugin Name: WP Cloudflare AutoRAG Chatbot
 Description: Adds a shortcode that renders a chatbot UI backed by Cloudflare AutoRAG. Includes a server-side proxy to avoid exposing your API token.
-Version: 1.4.0
+Version: 1.4.19
 Author: neuno.ai
 Author URI: https://neuno.ai
 License: GPL-2.0-or-later
@@ -28,14 +27,14 @@ function autorag_chatbot_enqueue_assets() {
         'autorag-chatbot-css',
         AUTORAG_CB_URL . 'chatbot.css',
         [],
-        '1.4.0'
+        '1.4.19'
     );
 
     wp_enqueue_script(
         'autorag-chatbot-js',
         AUTORAG_CB_URL . 'chatbot.js',
         [],
-        '1.4.0',
+        '1.4.19',
         true
     );
 

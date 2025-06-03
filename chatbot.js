@@ -3,17 +3,47 @@ document.addEventListener('DOMContentLoaded', () => {
   const input      = document.getElementById('chat-input');
   const chatWindow = document.getElementById('chat-window');
   const sendBtn    = document.querySelector('#autorag-chatbot .send-btn');
+  const scrollHint = document.createElement('div');
+  
+  scrollHint.className = 'scroll-hint';
+  chatWindow.parentElement.appendChild(scrollHint);
+  
+const chatCard = chatWindow.closest('.chat-card');
+
+const positionScrollHint = () => {
+  const gap = chatCard.clientHeight
+            - (chatWindow.offsetTop + chatWindow.clientHeight);
+  scrollHint.style.bottom = gap + 'px';
+};  
+
+  const updateScrollHint = () => {
+    const needsHint =
+      chatWindow.scrollHeight > chatWindow.clientHeight &&
+      chatWindow.scrollTop + chatWindow.clientHeight < chatWindow.scrollHeight - 4;
+    scrollHint.style.opacity = needsHint ? '1' : '0';
+  };
+  chatWindow.addEventListener('scroll', updateScrollHint);
+  window.addEventListener('load',   updateScrollHint);
+  window.addEventListener('resize', updateScrollHint);
+  window.addEventListener('resize', positionScrollHint, { passive:true });
+  new MutationObserver(updateScrollHint).observe(chatWindow, {
+    childList: true,
+    subtree:   true
+  });
+
+  positionScrollHint();
+  updateScrollHint();  
 
   const appendMessage = (author, textOrHTML, isHTML = false) => {
     const wrapper = document.createElement('div');
     wrapper.className = 'bubble ' + (author === 'You' ? 'user' : 'bot');
-    if (isHTML) {
-       wrapper.innerHTML = textOrHTML;
-    } else {
-       wrapper.textContent = textOrHTML;
-    }
+    
+    isHTML ? (wrapper.innerHTML = textOrHTML)
+           : (wrapper.textContent = textOrHTML);
+           
     chatWindow.appendChild(wrapper);
     chatWindow.scrollTop = chatWindow.scrollHeight;
+    updateScrollHint();
     return wrapper;
   };
 

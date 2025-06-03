@@ -147,3 +147,45 @@
 
 .typing-dots span:nth-child(2) { animation-delay: .2s; }
 .typing-dots span:nth-child(3) { animation-delay: .4s; }
+
+/* ─── visual “there’s-more-below” hint ────────────────────────── */
+#autorag-chatbot .chat-card        { position: relative; }
+#autorag-chatbot .scroll-hint      {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 42px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .2s ease;
+  role: button;
+  aria-label: "Scroll to newest message";
+}
+#autorag-chatbot .scroll-hint::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+      rgba(255,255,255,0) 0%,
+      var(--chat-card-bg, #fff) 75%
+  );
+}
+
+/* down-arrow that bobs gently */
+#autorag-chatbot .scroll-hint::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  width: 12px;
+  height: 12px;
+  transform: translateX(-50%) rotate(45deg);
+  border-right: 2px solid rgba(0,0,0,.35);
+  border-bottom: 2px solid rgba(0,0,0,.35);
+  animation: scroll-bounce 1.3s infinite;
+}
+
+@keyframes scroll-bounce {
+  0%, 100% { transform: translate(-50%,0)  rotate(45deg); }
+  40%      { transform: translate(-50%,6px) rotate(45deg); }
+}
