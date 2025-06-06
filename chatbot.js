@@ -84,7 +84,9 @@ const positionScrollHint = () => {
         throw new Error(msg);
       }
 
-      bubble.textContent = data.result?.response || 'No answer';
+      bubble.innerHTML  = window.autoragRenderMarkdown(
+         data.result?.response || 'No answer'
+      );      
 
     } catch (err) {
       bubble.textContent =
